@@ -4,6 +4,7 @@ import os
 from agent_framework import MCPStreamableHTTPTool
 from agent_framework.foundry import FoundryAgent
 from azure.identity import AzureCliCredential
+from azure.monitor.opentelemetry import configure_azure_monitor
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,6 +18,9 @@ def _required_env(name: str) -> str:
 
 
 async def main() -> None:
+    if os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING"):
+        configure_azure_monitor()
+
     agent = FoundryAgent(
         project_endpoint=_required_env("FOUNDRY_PROJECT_ENDPOINT"),
         agent_name=_required_env("FOUNDRY_AGENT_NAME"),
@@ -48,3 +52,10 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
+   
+
+
+
+
+
+   
